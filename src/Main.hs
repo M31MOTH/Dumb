@@ -7,9 +7,8 @@ import Data.ByteString.Char8 (pack, unpack)
 import System.Environment (getArgs)
 import Data.Either.Unwrap (whenRight)
 import Network.DNS (makeResolvSeed, defaultResolvConf, withResolver, lookupA, Domain)
-import qualified Control.Monad.Parallel as MP (mapM)
-
 import Control.Parallel.Strategies (parMap, rpar)
+import qualified Control.Monad.Parallel as MP (mapM)
 
 getWordlist :: FilePath -> IO [String]
 getWordlist filename = do
