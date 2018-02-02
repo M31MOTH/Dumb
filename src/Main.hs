@@ -1,17 +1,12 @@
 module Main where
 
-import System.IO
-import System.Exit
-import Network.DNS
-import Data.Either
---import Data.IP.Addr.IPv4
---import Control.Applicative
-import Control.Exception
+import System.Exit (die)
+import Control.Exception (try)
 import Data.ByteString (ByteString)
 import Data.ByteString.Char8 (pack, unpack)
---import Data.ByteString.Char8 (pack)
 import System.Environment (getArgs)
 import Data.Either.Unwrap (whenRight)
+import Network.DNS (makeResolvSeed, defaultResolvConf, withResolver, lookupA, Domain)
 
 getWordlist :: FilePath -> IO [String]
 getWordlist filename = do
