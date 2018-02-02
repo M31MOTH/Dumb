@@ -7,6 +7,7 @@ import Data.ByteString.Char8 (pack, unpack)
 import System.Environment (getArgs)
 import Data.Either.Unwrap (whenRight)
 import Network.DNS (makeResolvSeed, defaultResolvConf, withResolver, lookupA, Domain)
+import qualified Control.Monad.Parallel as MP (mapM)
 
 getWordlist :: FilePath -> IO [String]
 getWordlist filename = do
@@ -21,11 +22,11 @@ generateSubdomains domain wordlist =
 
 getIPs :: Show a => [a] -> String
 getIPs [x] = (show x)
-getIPs (x:xs) = getIPs xs ++ "|" ++ (show x)
+getIPs (x:xs) = getIPs xs ++ "," ++ (show x)
 
 printAll :: Show a => ByteString -> [a] -> IO ()
 printAll sub [] = return ()
-printAll sub lst = putStrLn $ "[+] Found subdomain " ++ (unpack sub) ++ " <=> " ++ (getIPs lst)
+printAll sub lst = putStrLn $ "[+] " ++ (unpack sub) ++ " <=> [" ++ (getIPs lst) ++ "]"
 
 resolve :: Domain -> IO ()
 resolve subdomain = do
@@ -39,5 +40,5 @@ main = do
   let domain = head args
       filename = args !! 1
   wordlist <- getWordlist filename
-  mapM resolve $ generateSubdomains domain wordlist
-  putStrLn $ "Hello World"
+  MP.mapM resolve $ generateSubdomains domain wordlist
+  return ()

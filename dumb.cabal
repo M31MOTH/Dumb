@@ -20,4 +20,5 @@ executable dumb
   build-depends:       base >= 4.7 && < 5,
                        dns,
                        bytestring,
-                       either-unwrap
+                       either-unwrap,
+                       monad-parallel
