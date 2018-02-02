@@ -21,4 +21,5 @@ executable dumb
                        dns,
                        bytestring,
                        either-unwrap,
+                       parallel,
                        monad-parallel

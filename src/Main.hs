@@ -9,6 +9,8 @@ import Data.Either.Unwrap (whenRight)
 import Network.DNS (makeResolvSeed, defaultResolvConf, withResolver, lookupA, Domain)
 import qualified Control.Monad.Parallel as MP (mapM)
 
+import Control.Parallel.Strategies (parMap, rpar)
+
 getWordlist :: FilePath -> IO [String]
 getWordlist filename = do
   contentOrException <- try $ readFile filename :: IO (Either IOError String)
@@ -18,7 +20,7 @@ getWordlist filename = do
 
 generateSubdomains :: String -> [String] -> [ByteString]
 generateSubdomains domain wordlist =
-  map pack $ map (++ "." ++ domain) wordlist
+  parMap rpar pack $ parMap rpar (++ "." ++ domain) wordlist
 
 getIPs :: Show a => [a] -> String
 getIPs [x] = (show x)
