@@ -8,7 +8,7 @@ import Data.Either
 --import Control.Applicative
 import Control.Exception
 import Data.ByteString (ByteString)
-import Data.ByteString.Char8 (pack)
+import Data.ByteString.Char8 (pack, unpack)
 --import Data.ByteString.Char8 (pack)
 import System.Environment (getArgs)
 
@@ -24,12 +24,13 @@ generateSubdomains domain wordlist =
   map pack $ map (++ "." ++ domain) wordlist
 
 --resolve :: Domain -> IO (Either DNSError [Data.IP.Addr.IPv4])
+resolve :: Domain -> IO ()
 resolve subdomain = do
   rs <- makeResolvSeed defaultResolvConf
   result <- withResolver rs $ \resolver -> lookupA resolver subdomain
   case result of
-    Left err -> print "[-] Could not resolve " ++ subdomain
-    Right ip -> print "[+] Found subomain " ++ subomain ++ " <=> " ++ ip
+    Left err -> print ("Could not find subdomain " ++ (unpack subdomain))
+    Right ip -> print ("[+] Found subdomain " ++ (unpack subdomain) ++ " <=> "++ (show (head ip)))
 
 main :: IO ()
 main = do
