@@ -22,4 +22,5 @@ executable dumb
                        bytestring,
                        either-unwrap,
                        parallel,
-                       monad-parallel
+                       monad-parallel,
+                       text
